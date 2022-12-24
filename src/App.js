@@ -2,32 +2,46 @@
 
 import './App.css';
 import React, { useState, useEffect } from 'react';
+import Weather from './components/Weather/Weather';
 
 function App() {
   const [lat, setLat] = useState([]);
-  const [long, setLong] = useState([]);
+  const [lon, setLon] = useState([]);
   const [data, setData] = useState([]);
 
-  useEffect(() => {
+  const REACT_APP_API_URL = 'https://api.openweathermap.org/data/2.5/weather?';
+  const REACT_APP_API_KEY = 'b85380eb92ef20e64b69f7bc894e07ae';
+
+  // useEffect(() => {
     const fetchData = async () => {
-      navigator.geolocation.getCurrentPosition(function (position) {
+      navigator.geolocation.getCurrentPosition((position) => {
         setLat(position.coords.latitude);
-        setLong(position.coords.longitude);
-      });
-
+        setLon(position.coords.longitude);
+      })
       await fetch(
-        `http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${process.env.REACT_APP_API_KEY}`
+        `${REACT_APP_API_URL}lat=${lat}&lon=${lon}&appid=${REACT_APP_API_KEY}&units=metric`
       )
-        // .then((res) => res.json())
-        .then((result) => {
-          setData(result);
-          console.log(result);
-        });
+          .then((response) => response.json())
+          .then((result) => {
+            setData(result);
+            console.log(result);
+          })
+          .catch((e) => {
+            console.error(e);
+          })
     };
-    fetchData();
-  }, [lat, long]);
+    
+    // };
+  // }, [lon, lat]);
 
-  return <div className='App'></div>;
+  // if ()
+
+  return (
+    <div className='App'>
+      {typeof data.main !== 'undefined' ? <Weather weatherData={data} /> : <div></div>}
+      <div><button onClick={fetchData}>Pull Weather</button></div>
+    </div>
+  );
 }
 
 export default App;
