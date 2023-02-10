@@ -10,7 +10,9 @@ const Weather = ({ weatherData }) => {
   const sunrise = new Date(weatherData.sys.sunrise);
   const dateHours = sunrise.getHours();
   const dateMinutes = sunrise.getMinutes();
+  console.log(weatherData.sys.sunrise);
   // console.log(dateHours);
+  // console.log(dateMinutes);
 
   const windDirectionChecker = (d) => {
     switch (true) {
@@ -45,20 +47,28 @@ const Weather = ({ weatherData }) => {
     }
   };
 
-
   windDirectionChecker(weatherData.wind.deg);
 
+  console.log(weatherData.weather[0].description);
+
   return (
-    <Card className='cardDiv'>
-      <Card.Content>
-        <Card.Header className='header'>{weatherData.name}</Card.Header>
-        <p>Temperature: {weatherData.main.temp} degrees celsius</p>
-        <p>Feels Like: {weatherData.main.feels_like} degrees celsius</p>
-        <p>The wind is blowing in from the: {windDirection}</p>
-        <p>Wind speed is {weatherData.wind.speed} KM/h</p>
-        <p>Wind gusts are reaching {weatherData.wind.gust} KM/h</p>
-      </Card.Content>
-    </Card>
+    <div className='card-container'>
+      <Card className='card-div'>
+        <Card.Content>
+          <Card.Header className='header'>
+            {weatherData.name}
+          </Card.Header>
+          <p>Temperature: {weatherData.main.temp} degrees celsius</p>
+          <p>
+            Feels Like: {weatherData.main.feels_like} degrees celsius
+          </p>
+          <p>The wind is blowing in from the: {windDirection}</p>
+          <p>Wind speed is {weatherData.wind.speed} KM/h</p>
+          <p>Wind gusts are reaching {weatherData.wind.gust} KM/h</p>
+          <p>{weatherData.weather[0].description}</p>
+        </Card.Content>
+      </Card>
+    </div>
   );
 };
 
